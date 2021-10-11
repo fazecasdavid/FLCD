@@ -1,0 +1,24 @@
+Link to github: https://github.com/thediciman/FLCD
+
+This implementation of SymbolTable is based on a hash table.
+
+The SymbolTable uses internally a list of buckets (lists of strings), "simulating" a hash table with separate chaining.
+
+It supports the following operations, which are synchronized, thus thread-safe:
+
+	- Pair<Integer, Integer> put(String value): add a new value to the hash table, while discarding duplicate values, and return the position (which is a pair of (bucket index, index in bucket)) of the element.
+		- a lookup of this value is performed to make sure that there won't be duplicated values; in case it already exists, it won't be added anymore and a null position will be returned.
+		- the hash of the value is computed and it represents the index of the bucket that the value should be placed in
+		- the position of the value is computed (it will always be the index of the next element in the list, or the current size of the list)
+		- the value is added in the corresponding bucket
+		- a new pair of two integers is created and returned, corresponding the position in the internal data structure (bucket index, index in bucket)
+
+	- Pair<Integer, Integer> get(final String value): get the position (bucket index, index in bucket) of a given value.
+		- the hash of the value is computed, representing the index of the bucket in which the value should be found; if this hash is invalid, a null position is returned
+		- the position of the value is looked up, and if it is -1 a null position is returned
+		- if the position of the value is not -1, a new pair of (bucket index, index in bucket) is returned
+
+	- String get(final Pair<Integer, Integer> position): get the value from a given position.
+		- if the position is null, a null value is returned.
+		- validate that the bucket index and the index from the bucket are valid; if they are not, return a null value
+		- if the two indices are valid, return the value from the corresponding bucket, at the corresponding position
