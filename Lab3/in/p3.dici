@@ -1,0 +1,20 @@
+game
+{
+
+    integer n;
+    read(n);
+
+    integer sum;
+    sum = 0;
+
+    integer x;
+
+    for (integer i = 0; i < n; i = i + 1) {
+        read(x);
+        sum = sum + x;
+    }
+
+    write(sum);
+
+}
+stop
