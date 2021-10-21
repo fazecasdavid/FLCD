@@ -1,23 +1,23 @@
 import model.Pair;
+import model.ProgramInternalForm;
 import model.Scanner;
 import model.SymbolTable;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-// TODO: create PIF class, refactor, generate class diagram, add documentation
+// TODO: generate class diagram, add documentation
 
 public class Main {
 
-    private static final String INPUT_FILENAME = "in/p1.dici";
+    private static final String INPUT_FILENAME = "in/p1err.dici";
 
     public static void main(final String[] args) {
-        final Pair<SymbolTable, List<Pair<Integer, Pair<Integer, Integer>>>> scanResult = Scanner.scan(INPUT_FILENAME);
+        final Pair<SymbolTable, ProgramInternalForm> scanResult = Scanner.scan(INPUT_FILENAME);
 
         final SymbolTable symbolTable = scanResult.getFirst();
-        final List<Pair<Integer, Pair<Integer, Integer>>> programInternalForm = scanResult.getSecond();
+        final ProgramInternalForm programInternalForm = scanResult.getSecond();
 
         System.out.println();
         System.out.println("Lexically correct.");
@@ -31,7 +31,7 @@ public class Main {
         }
 
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("out/PIF.out"))) {
-            for (final Pair<Integer, Pair<Integer, Integer>> pair : programInternalForm) {
+            for (final Pair<Integer, Pair<Integer, Integer>> pair : programInternalForm.getUnderlyingData()) {
                 bufferedWriter.write(pair.getFirst() + " -> " + pair.getSecond() + "\n");
             }
         } catch (final IOException e) {
