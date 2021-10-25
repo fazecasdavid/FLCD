@@ -33,9 +33,10 @@ public class Scanner {
 
     private static final String letterRegex = "[a-zA-Z]";
     private static final String digitRegex = "[0-9]";
-    private static final String anyStringRegex = "\\b(" + digitRegex + "|" + letterRegex + ")*\\b";
+    private static final String anyNumberRegex = "([-+]?[0-9]*)";
+    private static final String anyStringRegex = "\\b(" + letterRegex + "|" + digitRegex + ")*\\b";
     private static final String identifierRegex = letterRegex + "(" + letterRegex + "|" + digitRegex + ")*";
-    private static final String integerConstantRegex = "(0|[+\\-]?[1-9]" + digitRegex + "*)";
+    private static final String integerConstantRegex = "(0|[-+]?[1-9]" + digitRegex + "*)";
     private static final String characterConstantRegex = "('(" + letterRegex + "|" + digitRegex + ")')";
     private static final String stringConstantRegex = "(\"(" + letterRegex + "|" + digitRegex + ")*\")";
     private static final String constantRegex = integerConstantRegex + "|" + characterConstantRegex + "|" + stringConstantRegex;
@@ -53,6 +54,7 @@ public class Scanner {
             tokenizerRegex.append(Pattern.quote(separator)).append("|");
         }
         tokenizerRegex.append("\\s+");
+        tokenizerRegex.append(anyNumberRegex).append("|");
         tokenizerRegex.append(anyStringRegex).append("|");
         tokenizerRegex.append(identifierRegex).append("|");
         tokenizerRegex.append(constantRegex).append("|");

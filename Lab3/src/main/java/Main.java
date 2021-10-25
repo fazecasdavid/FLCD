@@ -7,11 +7,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-// TODO: generate class diagram, add documentation
-
 public class Main {
 
-    private static final String INPUT_FILENAME = "in/p1err.dici";
+    private static final String INPUT_FILENAME = "in/p1.dici";
 
     public static void main(final String[] args) {
         final Pair<SymbolTable, ProgramInternalForm> scanResult = Scanner.scan(INPUT_FILENAME);
