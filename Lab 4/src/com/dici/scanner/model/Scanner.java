@@ -98,11 +98,12 @@ public class Scanner {
 
     private static boolean isIdentifier(final String token) {
         return identifiersFA.accepts(token);
+//        return token.matches("^" + identifierRegex + "$");
     }
 
     private static boolean isConstant(final String token) {
-//        return constantsFA.accepts(token);
-        return token.matches("^" + constantRegex + "$");
+        return constantsFA.accepts(token);
+//        return token.matches("^" + constantRegex + "$");
     }
 
     public static Pair<SymbolTable, ProgramInternalForm> scan(final String filename) {
