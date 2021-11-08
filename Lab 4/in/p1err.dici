@@ -1,0 +1,21 @@
+game
+{
+
+    integer 2a;
+    integer b;
+
+    read(2a);
+    read(b);
+
+    integer sum;
+    sum = 2a + b;
+
+    write(sum);
+
+    character x;
+    x = 'X;
+
+    write(x);
+
+}
+stop
