@@ -43,7 +43,9 @@ public class FiniteAutomaton {
                 final Pair<String, String> sourceAndRoute = new Pair<>(firstPartTokens[0], firstPartTokens[1]);
                 final String destination = parts[1];
                 if (transitions.containsKey(sourceAndRoute)) {
-                    transitions.get(sourceAndRoute).add(destination);
+                    if (!transitions.get(sourceAndRoute).contains(destination)) {
+                        transitions.get(sourceAndRoute).add(destination);
+                    }
                 } else {
                     transitions.put(sourceAndRoute, new ArrayList<>(Collections.singletonList(destination)));
                 }
