@@ -1,0 +1,44 @@
+Program SimpleType ArrayType Type Declaration StatementList Statement CompoundStatement SimpleStatement StructureStatement IfStatement ForStatement WhileStatement Expression AssignmentStatement Term Factor IndexedIdentifier InputOutputStatement Relation Condition IntegerConstant Identifier
+
+
+Program -> game CompoundStatement stop
+
+SimpleType -> integer | string | character
+
+ArrayType -> SimpleType array [ IntegerConstant ]
+
+Type -> SimpleType | ArrayType
+
+Declaration -> Type Identifier
+
+StatementList -> Statement ; | Statement ; StatementList
+
+Statement -> SimpleStatement | StructureStatement
+
+CompoundStatement -> { StatementList }
+
+SimpleStatement -> ( AssignmentStatement | InputOutputStatement | Declaration ) ;
+
+StructureStatement -> CompoundStatement | IfStatement | WhileStatement | ForStatement
+
+IfStatement -> if Condition Statement { elif Condition Statement } [ else Statement ]
+
+ForStatement -> for ( integer AssignmentStatement ; Condition ; AssignmentStatement ) Statement
+
+WhileStatement -> while Condition Statement
+
+Expression -> [ Expression ( + | - ) ] Term
+
+AssignmentStatement -> Identifier = Expression
+
+Term -> Term ( * | / ) Factor | Factor
+
+Factor -> ( Expression ) | IntegerConstant | Identifier | IndexedIdentifier
+
+IndexedIdentifier -> Identifier [ IntegerConstant ]
+
+InputOutputStatement -> ( read ( Identifier ) ) | ( write ( ( Identifier | Constant ) ) )
+
+Relation -> < | <= | == | != | >= | >
+
+Condition -> ( Expression Relation Expression )
