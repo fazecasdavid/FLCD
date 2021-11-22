@@ -72,6 +72,14 @@ public class Grammar {
         throw new RuntimeException("Could not read grammar from file!");
     }
 
+    public boolean isTerminal(final String symbol) {
+        return terminals.contains(symbol);
+    }
+
+    public boolean isNonterminal(final String symbol) {
+        return nonterminals.contains(symbol);
+    }
+
     public Production getProductionsForNonterminal(final String nonterminal) {
         if (!nonterminals.contains(nonterminal)) {
             throw new RuntimeException(String.format("Given nonterminal: %s is not one of the nonterminals of the grammar.", nonterminal));
