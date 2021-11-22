@@ -1,5 +1,6 @@
-Program SimpleType ArrayType Type Declaration StatementList Statement CompoundStatement SimpleStatement StructureStatement IfStatement ForStatement WhileStatement Expression AssignmentStatement Term Factor IndexedIdentifier InputOutputStatement Relation Condition IntegerConstant Identifier
-
+Program SimpleType ArrayType Type Declaration StatementList Statement CompoundStatement SimpleStatement StructureStatement IfStatement ForStatement WhileStatement Expression AssignmentStatement Term Factor IndexedIdentifier InputOutputStatement Relation Condition
+[ ] { } ( ) ; <= >= == != + - * / = < > ! & | game stop integer character string array while for if else read write " Identifier Constant IntegerConstant
+Program
 
 Program -> game CompoundStatement stop
 
@@ -17,27 +18,27 @@ Statement -> SimpleStatement | StructureStatement
 
 CompoundStatement -> { StatementList }
 
-SimpleStatement -> ( AssignmentStatement | InputOutputStatement | Declaration ) ;
+SimpleStatement -> AssignmentStatement | InputOutputStatement | Declaration ;
 
 StructureStatement -> CompoundStatement | IfStatement | WhileStatement | ForStatement
 
-IfStatement -> if Condition Statement { elif Condition Statement } [ else Statement ]
+IfStatement -> if Condition Statement | if Condition Statement else Statement
 
 ForStatement -> for ( integer AssignmentStatement ; Condition ; AssignmentStatement ) Statement
 
 WhileStatement -> while Condition Statement
 
-Expression -> [ Expression ( + | - ) ] Term
+Expression -> Term | Expression + Term | Expression - Term
 
 AssignmentStatement -> Identifier = Expression
 
-Term -> Term ( * | / ) Factor | Factor
+Term -> Factor | Term * Factor | Term / Factor
 
 Factor -> ( Expression ) | IntegerConstant | Identifier | IndexedIdentifier
 
 IndexedIdentifier -> Identifier [ IntegerConstant ]
 
-InputOutputStatement -> ( read ( Identifier ) ) | ( write ( ( Identifier | Constant ) ) )
+InputOutputStatement -> read ( Identifier ) | write ( Constant ) | write ( Identifier )
 
 Relation -> < | <= | == | != | >= | >
 

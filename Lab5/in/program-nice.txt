@@ -1,0 +1,14 @@
+game
+{
+    integer a;
+    integer b;
+
+    read(a);
+    read(b);
+
+    integer s;
+
+    s = a + b;
+    write(s);
+}
+stop

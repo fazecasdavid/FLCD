@@ -7,10 +7,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -37,19 +37,28 @@ public class Grammar {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 line = line.strip();
+                if (line.isEmpty()) continue;
                 final String[] tokens = line.split("->");
                 final String[] leftSide = tokens[0].split("\\s+");
                 if (leftSide.length != 1) {
                     throw new RuntimeException("The given grammar is not context-free!");
                 }
                 final String[] rightSide = tokens[1].split("\\|");
-                final Set<List<String>> productionRules = new HashSet<>();
+                final List<List<String>> productionRules = new ArrayList<>();
                 for (final String rule : rightSide) {
                     productionRules.add(List.of(rule.strip().split("\\s+")));
                 }
                 final Optional<Production> productionOptional = productions.stream().filter(production -> production.getStartingNonterminal().equals(leftSide[0])).findAny();
                 if (productionOptional.isPresent()) {
-                    productionOptional.get().getRules().addAll(productionRules);
+                    final Production production = productionOptional.get();
+                    production
+                        .getRules()
+                        .addAll(
+                            productionRules
+                                .stream()
+                                .filter(rule -> !productionOptional.get().getRules().contains(rule))
+                                .collect(Collectors.toList())
+                        );
                 } else {
                     productions.add(new Production(leftSide[0], productionRules));
                 }
@@ -65,7 +74,7 @@ public class Grammar {
 
     public Production getProductionsForNonterminal(final String nonterminal) {
         if (!nonterminals.contains(nonterminal)) {
-            throw new RuntimeException("Given nonterminal is not one of the nonterminals of the grammar.");
+            throw new RuntimeException(String.format("Given nonterminal: %s is not one of the nonterminals of the grammar.", nonterminal));
         }
         return productions
             .stream()
@@ -96,7 +105,7 @@ public class Grammar {
 
         private final String startingNonterminal;
 
-        private final Set<List<String>> rules;
+        private final List<List<String>> rules;
 
     }
 
