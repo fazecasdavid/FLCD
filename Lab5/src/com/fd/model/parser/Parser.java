@@ -1,5 +1,11 @@
-package com.fd.model;
+package com.fd.model.parser;
 
+import com.fd.model.Grammar;
+import com.fd.model.Pair;
+import com.fd.model.parser.output.DerivationStringOutput;
+import com.fd.model.parser.output.ParserOutput;
+import com.fd.model.parser.output.ProductionStringOutput;
+import com.fd.model.parser.output.TableOutput;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -8,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class Parser {
 
-    public static String parse(final Grammar grammar, final List<String> inputSequence) {
+    public static ParserOutput parse(final Grammar grammar, final List<String> inputSequence) {
         Configuration configuration = new Configuration(
             Configuration.ParsingState.NORMAL,
             0,
@@ -55,21 +61,7 @@ public class Parser {
             throw new RuntimeException("Error.");
         }
 
-        return buildStringOfProductions(configuration.getWorkingStack(), grammar);
-    }
-
-    private static String buildStringOfProductions(final List<Pair<String, Integer>> workingStack, final Grammar grammar) {
-        return workingStack
-            .stream()
-            .filter(pair -> pair.getSecond() != -1)
-            .map(pair ->
-                String.format(
-                    "%s -> %s",
-                    pair.getFirst(),
-                    String.join("", grammar.getProductionsForNonterminal(pair.getFirst()).getRules().get(pair.getSecond()))
-                )
-            )
-            .collect(Collectors.joining(", "));
+        return new TableOutput(configuration.getWorkingStack(), grammar);
     }
 
     private static Configuration success(final Configuration configuration) {
@@ -152,15 +144,6 @@ public class Parser {
 
         final Pair<String, Integer> A = configuration.getWorkingStackHead();
 
-        if (configuration.getCurrentSymbolPosition() == 0 && A.getFirst().equals(grammar.getStartingSymbol())) {
-            new Configuration(
-                Configuration.ParsingState.ERROR,
-                configuration.getCurrentSymbolPosition(),
-                configuration.getWorkingStack(),
-                configuration.getInputStack()
-            );
-        }
-
         final Grammar.Production production = grammar.getProductionsForNonterminal(A.getFirst());
         if (A.getSecond() + 1 < production.getRules().size()) {
             final List<Pair<String, Integer>> newWorkingStack = new ArrayList<>(configuration.getWorkingStack());
@@ -182,10 +165,22 @@ public class Parser {
                 newInputStack
             );
         } else {
+            if (configuration.getCurrentSymbolPosition() == 0 && A.getFirst().equals(grammar.getStartingSymbol())) {
+                return new Configuration(
+                    Configuration.ParsingState.ERROR,
+                    configuration.getCurrentSymbolPosition(),
+                    configuration.getWorkingStack(),
+                    configuration.getInputStack()
+                );
+            }
+
             final List<Pair<String, Integer>> newWorkingStack = new ArrayList<>(configuration.getWorkingStack());
             newWorkingStack.remove(newWorkingStack.size() - 1);
 
             final List<String> newInputStack = new ArrayList<>(configuration.getInputStack());
+            if (production.getRules().get(A.getSecond()).size() > 0) {
+                newInputStack.subList(0, production.getRules().get(A.getSecond()).size()).clear();
+            }
             newInputStack.add(0, A.getFirst());
 
             return new Configuration(

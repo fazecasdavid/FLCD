@@ -18,7 +18,7 @@ Statement -> SimpleStatement | StructureStatement
 
 CompoundStatement -> { StatementList }
 
-SimpleStatement -> AssignmentStatement | InputOutputStatement | Declaration ;
+SimpleStatement -> AssignmentStatement | InputOutputStatement | Declaration
 
 StructureStatement -> CompoundStatement | IfStatement | WhileStatement | ForStatement
 
@@ -34,7 +34,7 @@ AssignmentStatement -> Identifier = Expression
 
 Term -> Factor | Term * Factor | Term / Factor
 
-Factor -> ( Expression ) | IntegerConstant | Identifier | IndexedIdentifier
+Factor -> Identifier | IntegerConstant | IndexedIdentifier | ( Expression )
 
 IndexedIdentifier -> Identifier [ IntegerConstant ]
 
